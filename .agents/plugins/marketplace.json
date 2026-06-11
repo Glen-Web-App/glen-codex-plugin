@@ -1,0 +1,9 @@
+{
+  "name": "glen",
+  "plugins": [
+    {
+      "name": "glen",
+      "source": { "source": "local", "path": "./plugins/glen" }
+    }
+  ]
+}
