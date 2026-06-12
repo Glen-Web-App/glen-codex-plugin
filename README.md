@@ -19,6 +19,18 @@ When you submit a prompt in Codex, the glen plugin fires two hooks:
 Nothing is sent while incognito mode is on (`glen incognito on`). Glen never reads your
 filesystem directly — only what you send via prompts and assistant turns.
 
+## Skills
+
+The plugin ships three skills the agent invokes on demand:
+
+- **glen-search** — search the team's shared glen memory for a specific fact,
+  decision, or past discussion.
+- **glen-controls** — go off the record (incognito) or switch which
+  organization's memory is active, only when you explicitly ask.
+- **glen-setup** — set up, fix, or update glen on this machine. If glen is ever
+  broken (not connected, no org selected, hooks missing), just ask the agent to
+  "set up glen" and it repairs whatever `glen doctor` reports.
+
 ## Install
 
 1. Install the glen CLI (the plugin's hooks call it):
@@ -97,8 +109,9 @@ To update the glen CLI itself:
 glen update
 ```
 
-The CLI also checks for updates daily in the background and upgrades automatically
-when installed via npm global.
+`glen update` updates the CLI **and** any installed glen plugins in one go, and
+re-verifies the Codex hook registration. The CLI also checks for updates daily in
+the background and upgrades automatically when installed via npm global.
 
 ## Troubleshooting
 
@@ -114,6 +127,9 @@ glen status
 ```sh
 glen doctor
 ```
+
+**Broken setup?** Ask the agent to "set up glen" — the bundled glen-setup skill
+runs `glen doctor` and fixes whatever it reports.
 
 **Hooks not firing:** Re-run `glen install` — it idempotently repairs the hook
 registration in `~/.codex/hooks.json` and the trust records in `~/.codex/config.toml`.
