@@ -19,47 +19,49 @@ filesystem directly — only what you send via prompts and assistant turns.
 
 ## Install
 
-**Preferred (one command):**
+1. Install the glen CLI (the plugin's hooks call it):
 
-```sh
-glen install
-```
-
-**Manual:**
-
-```sh
-codex plugin marketplace add Glen-Web-App/glen-codex-plugin
-codex plugin add glen
-```
-
-### Required: trust glen's hooks
-
-After installing, open a Codex session and run:
-
-```
-/hooks
-```
-
-Find the glen hooks (`glen session-start` and `glen ingest`) and mark them as trusted.
-**This step is mandatory.** Codex silently skips untrusted hooks — without trusting,
-glen does nothing even though it appears installed.
-
-## Requirements
-
-1. Install the glen CLI:
-
-   ```sh
+   ```bash
    npm install -g @tryglen/cli
-   ```
-
-2. Log in and connect to your org:
-
-   ```sh
    glen login
    ```
 
-   After login your active organization is saved locally. Switch orgs at any time with
-   `glen org switch`.
+2. Register the plugin and its hooks:
+
+   ```bash
+   glen install
+   ```
+
+   `glen install` runs the Codex marketplace/plugin steps AND registers
+   glen's hooks in Codex's user config layer (`~/.codex/hooks.json`), then
+   auto-trusts them (`[hooks.state]` records in `~/.codex/config.toml`).
+
+After login your active organization is saved locally. Switch orgs at any time with
+`glen org switch`.
+
+## Why hooks live in `~/.codex/hooks.json`
+
+Codex does not fire hooks declared by plugin manifests
+([openai/codex#16430](https://github.com/openai/codex/issues/16430)) — the
+manifest in this package enumerates them (and will start working when the
+upstream fix ships), but today the only layer Codex's runtime actually
+executes is the user config layer. `glen install` writes glen's two hook
+lines there:
+
+- `SessionStart` → `glen session-start --agent codex` (injects org/session context)
+- `UserPromptSubmit` → `glen ingest --agent codex` (memory recall in, capture out)
+
+Both always exit 0 — a glen outage can never block your Codex session.
+Re-running `glen install` repairs the registration idempotently; other
+tools' hooks in the same file are preserved. If auto-trust fails, open
+Codex, run `/hooks`, and trust the glen hooks manually.
+
+## Uninstall
+
+```bash
+glen uninstall        # removes glen's hook entries + trust records
+codex plugin remove glen
+```
 
 ## What data is sent
 
@@ -111,8 +113,10 @@ glen status
 glen doctor
 ```
 
-**Hooks not firing:** Ensure you ran `/hooks` inside Codex and trusted the glen hooks.
-Codex silently skips untrusted hooks — this is the most common issue.
+**Hooks not firing:** Re-run `glen install` — it idempotently repairs the hook
+registration in `~/.codex/hooks.json` and the trust records in `~/.codex/config.toml`.
+Codex silently skips untrusted hooks; if auto-trust failed, open Codex, run `/hooks`,
+and trust the glen hooks manually.
 
 **Stale update lock** (if `glen update` hangs): remove the lock file and retry:
 
