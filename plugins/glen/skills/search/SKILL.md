@@ -1,5 +1,5 @@
 ---
-name: glen-search
+name: search
 description: Search the team's shared glen memory for a SPECIFIC fact, decision, or past discussion that is not already in the auto-injected context. Do not use for things already recalled this turn.
 ---
 

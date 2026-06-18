@@ -23,11 +23,11 @@ filesystem directly — only what you send via prompts and assistant turns.
 
 The plugin ships three skills the agent invokes on demand:
 
-- **glen-search** — search the team's shared glen memory for a specific fact,
+- **search** — search the team's shared glen memory for a specific fact,
   decision, or past discussion.
-- **glen-controls** — go off the record (incognito) or switch which
+- **controls** — go off the record (incognito) or switch which
   organization's memory is active, only when you explicitly ask.
-- **glen-setup** — set up, fix, or update glen on this machine. If glen is ever
+- **setup** — set up, fix, or update glen on this machine. If glen is ever
   broken (not connected, no org selected, hooks missing), just ask the agent to
   "set up glen" and it repairs whatever `glen doctor` reports.
 
@@ -128,7 +128,7 @@ glen status
 glen doctor
 ```
 
-**Broken setup?** Ask the agent to "set up glen" — the bundled glen-setup skill
+**Broken setup?** Ask the agent to "set up glen" — the bundled setup skill
 runs `glen doctor` and fixes whatever it reports.
 
 **Hooks not firing:** Re-run `glen install` — it idempotently repairs the hook

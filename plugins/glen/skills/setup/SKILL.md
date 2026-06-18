@@ -1,5 +1,5 @@
 ---
-name: glen-setup
+name: setup
 description: Set up, fix, or update glen on this machine. Use when the user asks to "set up glen", "fix glen", "update glen", says glen is not working / not connected / not recording, or the status line shows glen is not connected or has no org selected.
 ---
 

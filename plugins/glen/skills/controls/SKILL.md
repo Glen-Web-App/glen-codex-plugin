@@ -1,5 +1,5 @@
 ---
-name: glen-controls
+name: controls
 description: Control glen memory for this machine - go off the record (incognito) or switch which organization's memory is active. Use ONLY when the user explicitly asks (e.g. "go off the record", "stop recording", "switch to my personal org").
 ---
 
