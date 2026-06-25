@@ -5,6 +5,9 @@
     ],
     "UserPromptSubmit": [
       { "hooks": [{ "type": "command", "command": "glen ingest --agent codex" }] }
+    ],
+    "Stop": [
+      { "hooks": [{ "type": "command", "command": "glen ingest --agent codex" }] }
     ]
   }
 }
