@@ -15,6 +15,7 @@ You are authoring a reusable **skill** — a focused markdown prompt another age
    - Give concrete, ordered steps — exact commands, file paths, gotchas — not vague advice.
    - Keep it self-contained: assume zero prior context. Cut anything that isn't actionable.
    - **Reference other skills** when a step is itself a saved skill: write a markdown link `[Display text](glen:<slug>)` (find the slug with `glen skill search`). Glen tracks the link automatically and the reader will get a runnable `glen skill use <slug>` command exactly there — keep each referenced skill focused and say *when* to reach for it.
+   - **If the skill is large, split it into a root + subskills** instead of shipping a monolith. When the body would be long or spans several distinct modes/topics, write a short *root* skill that says *when to reach for each part*, and move each part into its own focused skill the root references via `[Name](glen:<slug>)`. Create the subskills FIRST (so their slugs exist), then reference them from the root — the reader loads the small root and pulls only the subskill it needs on demand (progressive disclosure). For a Glen skill, each subskill is its own `glen skill create`; for a local skill, each is its own `SKILL.md`.
 5. **Finish based on the destination chosen in step 1:**
 
    **Local skill** (and always the incognito path) — nothing leaves the machine:
