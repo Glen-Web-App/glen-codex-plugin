@@ -14,6 +14,7 @@ You are authoring a reusable **skill** — a focused markdown prompt another age
    - Lead with *when to use it* and the end goal.
    - Give concrete, ordered steps — exact commands, file paths, gotchas — not vague advice.
    - Keep it self-contained: assume zero prior context. Cut anything that isn't actionable.
+   - **Reference other skills** when a step is itself a saved skill: write a markdown link `[Display text](glen:<slug>)` (find the slug with `glen skill search`). Glen tracks the link automatically and the reader will get a runnable `glen skill use <slug>` command exactly there — keep each referenced skill focused and say *when* to reach for it.
 5. **Finish based on the destination chosen in step 1:**
 
    **Local skill** (and always the incognito path) — nothing leaves the machine:
