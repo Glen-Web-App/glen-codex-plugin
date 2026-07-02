@@ -1,6 +1,6 @@
 {
   "name": "glen",
-  "version": "0.11.3",
+  "version": "0.12.0",
   "description": "Shared team memory for coding agents — automatic recall and capture on every turn via the glen CLI.",
   "hooks": "./hooks/hooks.json",
   "skills": "./skills"
