@@ -1,6 +1,6 @@
 ---
 name: import-transcripts
-description: Import the user's old local coding-agent transcripts (Claude Code, Codex, or Cursor sessions from before glen was installed) into glen's shared team memory. Use when the user asks to import, backfill, or migrate past sessions/conversations/chat history into glen.
+description: Import the user's old local coding-agent transcripts (Claude Code, Codex, Cursor, or Pi sessions from before glen was installed) into glen's shared team memory. Use when the user asks to import, backfill, or migrate past sessions/conversations/chat history into glen.
 ---
 
 Run `glen import <path…>` via Bash. It parses local transcripts, replays them
@@ -12,6 +12,8 @@ Where old transcripts live:
 - Claude Code sessions: `~/.claude/projects` (one `<session-uuid>.jsonl` per
   session, grouped by project directory)
 - Codex sessions: `~/.codex/sessions`
+- Pi sessions: `~/.pi/agent/sessions` (one `<timestamp>_<uuid>.jsonl` per session,
+  grouped by project directory)
 - Cursor chats: `~/.config/Cursor/User/globalStorage/state.vscdb` on Linux,
   `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb` on
   macOS (needs Node 22.5+; close Cursor first for the freshest data)

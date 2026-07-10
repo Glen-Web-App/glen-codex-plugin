@@ -16,16 +16,18 @@ user what changed.
 - `status: login=ok org=missing` → run `glen org list`, show the user the
   options, and run `glen org switch <slug>` for their choice. Never pick an
   org for them.
-- `status: claude=detected plugin=not-installed` (or codex) → run
-  `glen install --agent <claude|codex>` for the agent you are running in.
+- `status: claude=detected plugin=not-installed` (or codex/pi) → run
+  `glen install --agent <claude|codex|pi>` for the agent you are running in.
+  For pi, tell the user to run `/reload` inside pi (or restart pi) afterwards
+  so the glen extension loads.
 - `status: codex=detected plugin=... hooks=not-registered` → run
   `glen install --agent codex`.
 - `status: codex-self-heal=failed: ...` → run `glen install --agent codex`,
   then re-check.
-- `status: claude=not-found` (or `status: codex=not-found`) when the user says
-  it IS installed → ask them to run `which claude` (or `which codex`) in their
-  terminal, then run `glen install --claude-path <that path>` (or
-  `--codex-path`).
+- `status: claude=not-found` (or `status: codex=not-found` /
+  `status: pi=not-found`) when the user says it IS installed → ask them to run
+  `which claude` (or `which codex` / `which pi`) in their terminal, then run
+  `glen install --claude-path <that path>` (or `--codex-path` / `--pi-path`).
 
 Finish with `glen status` and tell the user, in one sentence, what state they
 are in now.
