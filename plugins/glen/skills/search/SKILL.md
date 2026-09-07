@@ -3,6 +3,8 @@ name: search
 description: Search the team's shared glen memory for a SPECIFIC fact, decision, or past discussion that is not already in the auto-injected context. Do not use for things already recalled this turn.
 ---
 
+For current or source-owned facts, use the available source-of-truth tool first (for example, Slack, GitHub, Notion, or logs), especially when the user names it. Use Glen only for durable history or to supplement that source; if the live source is unavailable, say so, and if it conflicts with Glen, prefer it for current state.
+
 Run `glen search "<query>"` via Bash — **start with ONE comprehensive query, not a
 fan-out of variants**.
 
@@ -26,7 +28,8 @@ ask yourself whether the follow-up will provide real value the first result didn
 and skip it if you already have enough to act. Never re-run a mere rephrase of a
 query that returned little — same memory, same cost, nothing new.
 
-The output is a dated context block — treat it as memory, cite dates when relevant,
-and quote the `[m:…]` id tags when the user may want to follow up on (or correct) a
-specific memory. If it prints no results, say so rather than re-searching variants.
+The output is a synthesized answer followed by a "Sources:" list (conversation ·
+date · author · id) — treat the answer as recalled memory (it may be outdated or
+conflicting), and cite the sources when relevant. If it prints no results, say so
+rather than re-searching variants.
 If it prints "No active organization", tell the user to run `glen org switch`.

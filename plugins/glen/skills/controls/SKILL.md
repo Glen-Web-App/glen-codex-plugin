@@ -7,13 +7,14 @@ glen has four modes. Always confirm the change to the user.
 
 - **On:** `glen on` — glen injects context and records everything (the default).
   **Account-wide:** resumes recording on every machine, agent, and connected client.
-- **Off:** `glen off` — glen injects nothing AND records nothing **on this machine**
-  until `glen on`. Use when the user wants glen fully paused/disabled here.
+- **Off:** `glen off` — glen injects nothing AND records nothing until `glen on`.
+  **Account-wide and server-enforced:** fully pauses glen on every machine, agent,
+  and connected client.
 - **Incognito (off the record):** `glen incognito` — glen keeps recalling/injecting
   but records nothing until `glen on`. **Account-wide and server-enforced:** the
   server blocks memory writes for every machine, agent, and connected client, not
-  just this one; the same switch lives on the dashboard's Memories page. Use for
-  "go off the record" / "stop recording".
+  just this one; the same switch lives on the dashboard's Memories page. Admin
+  analytics still count prompts as content-free numbers — never content. Use for "go off the record" / "stop recording".
 - **Silent:** `glen silent` — glen keeps recording everything but surfaces
   nothing: no recall, no suggestions, and `glen search` returns nothing, until
   `glen on`. **Account-wide and server-enforced** (the server returns empty
@@ -21,7 +22,7 @@ glen has four modes. Always confirm the change to the user.
   on the dashboard's Memories page). Use for "just collect / stay out of my
   way / record but don't inject".
 
-`glen on`, `glen incognito`, and `glen silent` need to reach the glen server (the
+All four mode commands need to reach the glen server (the
 server is the source of truth); if the command fails, the mode did NOT change —
 tell the user.
 
@@ -37,6 +38,8 @@ don't help/inject" → `glen silent`; "turn glen off entirely / disable glen" �
   menu). Use for "stop suggesting skills" / "don't recommend skills". Like the
   modes, a failed command means the preference did NOT change — tell the user.
 - Switch org: run `glen org switch <slug>` (or `glen org list` to see options).
-  NEVER switch organizations unless the user explicitly asked — it changes which
-  tenant receives their data.
+  This remains per-machine but is audited server-side. NEVER switch organizations
+  unless the user explicitly asked — it changes which tenant receives their data.
+- Admin visibility: owners/admins can see every active-org member's current mode,
+  suggestion settings, and last update time at `/admin/controls`.
 - Show state: `glen status`.
