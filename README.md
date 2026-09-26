@@ -8,28 +8,45 @@ the same institutional knowledge.
 
 ## What it does
 
-When you submit a prompt in Codex, the glen plugin fires two hooks:
+The glen plugin registers these hooks, each a one-line `glen` CLI call:
 
-- **SessionStart** — announces the session to glen and injects any incognito/org
-  status as a system message.
-- **UserPromptSubmit** — sends the prompt (plus the prior assistant turn and workspace
-  context: repo, branch, agent name) to your glen org, retrieves matching memories, and
-  injects them as additional context for the model.
+- **SessionStart** (`glen session-start`) — injects glen's status (org, mode) as
+  context, shows a notice when glen is off, incognito, or silent, and runs
+  `glen doctor --auto` in the background.
+- **UserPromptSubmit** (`glen ingest`) — sends the prompt (plus the prior assistant
+  turn and workspace context: repo, branch, agent name) to your glen org, retrieves
+  matching memories, and injects them as additional context for the model.
+- **Stop** (`glen ingest`) — records the finished turn.
+- **PostToolUse** on Bash (`glen pr-link`) — after a `git commit`, links the commit
+  to the session in glen; when a command prints a GitHub PR URL, adds its Glen review link.
 
-Nothing is sent while incognito mode is on (`glen incognito on`). Glen never reads your
-filesystem directly — only what you send via prompts and assistant turns.
+`glen off` injects and records nothing. In incognito (`glen incognito`) recall still
+works but nothing is recorded to team memory. Glen reads only the hook input, the
+agent's session transcript, and git metadata for the current repo.
 
 ## Skills
 
-The plugin ships three skills the agent invokes on demand:
+The plugin ships skills the agent invokes on demand:
 
 - **search** — search the team's shared glen memory for a specific fact,
   decision, or past discussion.
-- **controls** — go off the record (incognito) or switch which
-  organization's memory is active, only when you explicitly ask.
+- **code-search** — trace a piece of code to the agent conversations that produced it.
+- **forget** — correct glen's memory by forgetting wrong or outdated evidence.
+- **controls** — turn glen on/off, go off the record (incognito), go silent,
+  toggle skill suggestions, or switch which organization's memory is active —
+  only when you explicitly ask.
 - **setup** — set up, fix, or update glen on this machine. If glen is ever
   broken (not connected, no org selected, hooks missing), just ask the agent to
   "set up glen" and it repairs whatever `glen doctor` reports.
+- **create-skill** / **use-skill** — save a workflow as a skill, or find and run
+  one from the Glen skill library.
+- **create-artifact** / **use-artifact** — save a document to your Glen artifact
+  library, or open one from it.
+- **import-transcripts** — import old local agent sessions into glen memory.
+- **invite** — invite a teammate to your glen organization.
+- **feedback** — send a bug report or product feedback to the Glen team.
+- **session-takeover** — open a shared transcript from a Glen takeover code in a
+  fresh session.
 
 ## Install
 
@@ -59,13 +76,15 @@ Codex does not fire hooks declared by plugin manifests
 ([openai/codex#16430](https://github.com/openai/codex/issues/16430)) — the
 manifest in this package enumerates them (and will start working when the
 upstream fix ships), but today the only layer Codex's runtime actually
-executes is the user config layer. `glen install` writes glen's two hook
+executes is the user config layer. `glen install` writes glen's four hook
 lines there:
 
 - `SessionStart` → `glen session-start --agent codex` (injects org/session context)
 - `UserPromptSubmit` → `glen ingest --agent codex` (memory recall in, capture out)
+- `Stop` → `glen ingest --agent codex` (records the finished turn)
+- `PostToolUse` (matcher `Bash`) → `glen pr-link --agent codex` (links commits, adds Glen review links)
 
-Both always exit 0 — a glen outage can never block your Codex session.
+All always exit 0 — a glen outage can never block your Codex session.
 Re-running `glen install` repairs the registration idempotently; other
 tools' hooks in the same file are preserved. If auto-trust fails, open
 Codex, run `/hooks`, and trust the glen hooks manually.
@@ -73,21 +92,25 @@ Codex, run `/hooks`, and trust the glen hooks manually.
 ## Uninstall
 
 ```bash
-glen uninstall        # removes glen's hook entries + trust records
-codex plugin remove glen
+glen uninstall
 ```
+
+Removes the glen plugin and marketplace, glen's hook entries and trust records,
+and the rest of glen's local setup.
 
 ## What data is sent
 
-On every `UserPromptSubmit` hook, glen sends to your glen org:
+On every `UserPromptSubmit` and `Stop` hook, glen sends to your glen org:
 
 - The current user prompt
 - The prior assistant turn (from `last_assistant_message`)
 - Workspace metadata: repo name, branch, commit hash, remote URL
 - Agent name (`codex`) and session details
 
-**Nothing is sent while incognito is on.** Recall still works — glen fetches relevant
-memories but writes nothing back. Toggle with `glen incognito on` / `glen incognito off`.
+**Nothing is recorded while incognito is on.** Recall still works — glen fetches
+relevant memories but writes nothing to team memory. Admin analytics still count your
+prompts as numbers only. Toggle with `glen incognito` / `glen on`. `glen off` injects
+and records nothing.
 
 Glen never sends data to any third party. All memory is stored in your org's private
 glen instance.
@@ -100,8 +123,8 @@ To update the plugin:
 codex plugin marketplace upgrade glen
 ```
 
-Glen's `session-start` hook also checks for a stale plugin version in the background
-on each session start and nudges you when an upgrade is available.
+Glen's `session-start` hook also runs this upgrade in the background on each session
+start (via `glen doctor --auto`).
 
 To update the glen CLI itself:
 
@@ -110,12 +133,12 @@ glen update
 ```
 
 `glen update` updates the CLI **and** any installed glen plugins in one go, and
-re-verifies the Codex hook registration. The CLI also checks for updates daily in
+re-verifies the Codex hook registration. The CLI also checks for updates hourly in
 the background and upgrades automatically when installed via npm global.
 
 ## Troubleshooting
 
-**Check session status (statusline, org, incognito):**
+**Check session status (statusline, org, mode):**
 
 ```sh
 glen statusline
