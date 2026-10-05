@@ -11,10 +11,10 @@ lands in the pool. When the user wants to bring someone in:
    emails: `glen invite alice@co.com bob@co.com`. To make someone an admin, add
    `--role admin` (default is a regular member).
 3. Report the result. Each address prints one of:
-   - `✓ Invitation sent to <email>` — an email invite is on its way; they accept
-     at the link and join the org.
-   - `· <email> is already a member` — nothing to do.
-   - `✗ Could not invite <email>` — relay the reason.
+   - `ok: Invitation sent to <email>`: an email invite is on its way; they
+     accept at the link and join the org.
+   - `· <email> is already a member`: nothing to do.
+   - `warning: could not invite <email> (<reason>)`: relay the reason.
 
 Or share a link instead of emailing: run `glen invite` with NO email to print a
 shareable join link for the org. Anyone who signs in with a verified email on the

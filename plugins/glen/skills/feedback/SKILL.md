@@ -33,11 +33,10 @@ differently for the team — "Claude Code noticed X" reads very differently from
 "Ada wants X", and both are useful.
 
 If you are filing **without being asked** — you hit the problem yourself and
-decided it was worth reporting — also pass `--proactive`. At most one proactive
-ticket is sent per session; further ones are skipped, so you never need to track
-whether you already filed. On an off-the-record (incognito) session the server
-refuses self-initiated tickets outright and the command tells you so — nothing
-the user didn't ask for leaves that session. Mention it and let them decide.
+decided it was worth reporting — also pass `--proactive`. On an off-the-record
+(incognito) session the server refuses self-initiated tickets outright and the
+command tells you so — nothing the user didn't ask for leaves that session.
+Mention it and let them decide.
 
 Only file proactively for something concrete and attributable:
 
@@ -52,8 +51,9 @@ let them decide.
 
 ## After running
 
-On success it prints `✓ Bug report sent` / `✓ Feedback sent` — tell the user it
-went in. On failure it prints a `✗` line naming the cause and the fix (e.g. "no
-active organization" → `glen org switch`). Relay that to the user and stop.
+On success it prints `ok: Bug report sent…` / `ok: Feedback sent…`: tell the user
+it went in. On failure it prints an `error:` line naming the cause, with a `fix:`
+line under it (e.g. "no active organization" → `glen org switch`). Relay that to
+the user and stop.
 **Never retry a failed filing in a loop**, and never re-file the same ticket with
 different wording.

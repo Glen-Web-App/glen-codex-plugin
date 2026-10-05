@@ -5,7 +5,9 @@ description: Set up, fix, or update glen on this machine. Use when the user asks
 
 Run `glen doctor` first and branch on its `status:` lines. Fix ONLY what is
 broken, in this order, then re-run `glen doctor` to verify and confirm to the
-user what changed.
+user what changed. After the `status:` lines, doctor lists problems: `error:`
+(broken) and `warning:` (worth fixing) lines, each with a `fix:` line under it,
+then `hint:` lines for things that may not apply. It still exits 0.
 
 - `glen: command not found` → install the CLI: `npm install -g @tryglen/cli`,
   then run `glen install` (it sets up the plugin + hooks for this agent).
@@ -36,14 +38,14 @@ state=<ok|failing|never|fresh-install|idle> lastSuccess=<iso|never>` line per
 detected agent — this tracks whether hooks are actually firing, separate from
 whether the plugin is installed:
 - `ok` / `failing` — reflects the last recorded hook run. For `failing`,
-  doctor prints a remedy right after the line (check `glen status`, then
+  doctor prints an `error:` line with a `fix:` under it (check `glen status`, then
   `glen login` if disconnected).
 - `fresh-install` — installed under an hour ago with no ingest yet; not a
   fault, just still warming up.
 - `idle` — hooks fire here; nothing recorded yet — logged out, glen off, or
   no completed turn.
-- `never` — hooks have never fired on THIS machine. Doctor prints a remedy
-  right after the line: untrusted hooks (trust them in-agent and start a new
+- `never` — hooks have never fired on THIS machine. Doctor prints it as a `warning:` line with a `fix:`
+  under it: untrusted hooks (trust them in-agent and start a new
   session), a PATH gap, a failed hook-trust query, or a machine-topology
   mismatch.
 - A topology mismatch usually means the agent process runs on a different
