@@ -5,7 +5,7 @@ description: Trace a specific piece of code to the agent conversations that prod
 
 Resolve the file and line range the user is asking about, then run
 `glen code-search <path:start-end> "<the user's question>"` via Bash — e.g.
-`glen code-search src/server/api/foo.ts:40-85 "why is this rate-limited?"`.
+`glen code-search src/api/rate-limit.ts:40-85 "why is this rate-limited?"`.
 
 The output is the ranked memory plus the full transcripts of the conversations
 behind the commits that last touched those lines. Answer from those transcripts —
