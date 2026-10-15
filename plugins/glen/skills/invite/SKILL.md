@@ -16,12 +16,6 @@ lands in the pool. When the user wants to bring someone in:
    - `· <email> is already a member`: nothing to do.
    - `warning: could not invite <email> (<reason>)`: relay the reason.
 
-Or share a link instead of emailing: run `glen invite` with NO email to print a
-shareable join link for the org. Anyone who signs in with a verified email on the
-org's work-email domain joins automatically — good for dropping in a team channel.
-(Requires "Let teammates join with their work email" to be enabled in
-Settings → General.)
-
 Notes:
 - Invites are sent by email and expire after 48 hours; the teammate clicks the
   link, signs in, and lands directly in the shared memory.
