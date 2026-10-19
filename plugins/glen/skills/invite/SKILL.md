@@ -19,4 +19,5 @@ lands in the pool. When the user wants to bring someone in:
 Notes:
 - Invites are sent by email and expire after 48 hours; the teammate clicks the
   link, signs in, and lands directly in the shared memory.
+- On a paid plan each new person adds a seat, charged now and prorated; glen invite prints the amount.
 - If it prints "no active organization", tell the user to run `glen org switch`.
