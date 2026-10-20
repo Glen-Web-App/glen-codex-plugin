@@ -1,9 +1,9 @@
 ---
 name: feedback
-description: Send a bug report or product feedback about glen itself to the Glen team. Use when the user says things like "tell the glen team", "file a bug about glen", "glen search is useless — report it", "give feedback on glen", or when YOU hit a concrete, reproducible glen malfunction worth reporting.
+description: Send a bug report or product feedback about glen itself to the Glen team. Use when the user says things like "tell the glen team", "file a bug about glen", "glen search is useless, report it", "give feedback on glen", or when YOU hit a concrete, reproducible glen malfunction worth reporting.
 ---
 
-This files a ticket about **glen itself** — the CLI, the memory, the search, the
+This files a ticket about **glen itself**: the CLI, the memory, the search, the
 dashboard. It is NOT for bugs in the user's own project. If the user says "file a
 bug" about the code you are working on, that belongs in their issue tracker, not
 here.
@@ -11,7 +11,7 @@ here.
 Tickets land in the same Slack channels the dashboard's feedback widget posts to,
 and carry the user's identity, the repo/branch, and a link to this conversation's
 transcript automatically. Never paste secrets, tokens, or file contents into a
-ticket — the transcript link already gives the team the context.
+ticket; the transcript link already gives the team the context.
 
 ## Filing on the user's behalf
 
@@ -29,13 +29,13 @@ interrogating the user for it.
 ## Filing on your own behalf
 
 When the observation is yours, not the user's, add `--from agent`. It renders
-differently for the team — "Claude Code noticed X" reads very differently from
+differently for the team: "Claude Code noticed X" reads very differently from
 "Ada wants X", and both are useful.
 
-If you are filing **without being asked** — you hit the problem yourself and
-decided it was worth reporting — also pass `--proactive`. On an off-the-record
+If you are filing **without being asked** (you hit the problem yourself and
+decided it was worth reporting), also pass `--proactive`. On an off-the-record
 (incognito) session the server refuses self-initiated tickets outright and the
-command tells you so — nothing the user didn't ask for leaves that session.
+command tells you so; nothing the user didn't ask for leaves that session.
 Mention it and let them decide.
 
 Only file proactively for something concrete and attributable:

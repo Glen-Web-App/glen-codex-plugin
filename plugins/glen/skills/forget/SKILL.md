@@ -1,11 +1,11 @@
 ---
 name: forget
-description: Correct glen's memory — forget evidence that is wrong, outdated, or no longer relevant, so the team stops being told it. Use when the user says things like "that's wrong, forget it", "glen has the wrong X", "that memory is out of date", or "stop remembering that" — or when YOU verify that recalled evidence is contradicted by current code or state.
+description: Correct glen's memory by forgetting evidence that is wrong, outdated, or no longer relevant, so the team stops being told it. Use when the user says things like "that's wrong, forget it", "glen has the wrong X", "that memory is out of date", or "stop remembering that", or when YOU verify that recalled evidence is contradicted by current code or state.
 ---
 
 A stale memory gets caught two ways: the user points at it, or you verify it yourself.
 
-**User-initiated** — the user says a remembered fact is wrong or outdated:
+**User-initiated**: the user says a remembered fact is wrong or outdated:
 
 1. Identify the relevant source references. Glen search results end each source with
    an exact `observation:<id>` or `message:<id>` reference. If the result is not
@@ -16,7 +16,7 @@ A stale memory gets caught two ways: the user points at it, or you verify it you
 3. Pass the returned references unchanged, in one command:
    `glen forget observation:<id> message:<id>`.
 
-**Agent-detected** — recalled evidence is contradicted by current code or state:
+**Agent-detected**: recalled evidence is contradicted by current code or state:
 
 1. Verify the contradiction directly. Never forget on suspicion, a partial view, or
    merely because two memories disagree; surface uncertain conflicts to the user.

@@ -25,7 +25,7 @@ Where old transcripts live:
   macOS (needs Node 22.5+; close Cursor first for the freshest data)
 
 A path can be a single file or a directory (scanned recursively; formats are
-auto-detected per file). Preview with `glen import --dry-run <path…>` — it
+auto-detected per file). Preview with `glen import --dry-run <path…>`; it
 lists every conversation and turn count without writing anything. For large
 directories, offer the dry run first so the user can confirm the scope.
 

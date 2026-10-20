@@ -3,7 +3,7 @@ name: invite
 description: Invite a teammate to the user's glen organization by email, so the team's shared memory grows. Use when the user says things like "invite Alice", "add my teammate to glen", "get my team on glen", or asks how to bring coworkers in.
 ---
 
-glen is shared team memory — it gets more useful with every teammate whose context
+glen is shared team memory: it gets more useful with every teammate whose context
 lands in the pool. When the user wants to bring someone in:
 
 1. Get the teammate's email address. Ask if it isn't given.

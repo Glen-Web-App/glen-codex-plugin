@@ -13,7 +13,7 @@ then `hint:` lines for things that may not apply. It still exits 0.
   then run `glen install` (it sets up the plugin + hooks for this agent).
 - `status: cli=<x> latest=<y> channel=<...>` where y is newer than x → run
   `glen update` (updates the CLI and any installed glen plugins in one go).
-- `status: login=missing ...` → run `glen login` — a browser window opens with
+- `status: login=missing ...` → run `glen login`. A browser window opens with
   a short device code prefilled; the user approves it to connect their account.
   If no browser can open (SSH/headless), relay the printed URL and code so the
   user can approve from any device.
@@ -35,25 +35,25 @@ then `hint:` lines for things that may not apply. It still exits 0.
 
 `glen doctor` also prints one `status: ingest agent=<agent>
 state=<ok|failing|never|fresh-install|idle> lastSuccess=<iso|never>` line per
-detected agent — this tracks whether hooks are actually firing, separate from
+detected agent. This tracks whether hooks are actually firing, separate from
 whether the plugin is installed:
-- `ok` / `failing` — reflects the last recorded hook run. For `failing`,
+- `ok` / `failing`: reflects the last recorded hook run. For `failing`,
   doctor prints an `error:` line with a `fix:` under it (check `glen status`, then
   `glen login` if disconnected).
-- `fresh-install` — installed under an hour ago with no ingest yet; not a
+- `fresh-install`: installed under an hour ago with no ingest yet; not a
   fault, just still warming up.
-- `idle` — hooks fire here; nothing recorded yet — logged out, glen off, or
-  no completed turn.
-- `never` — hooks have never fired on THIS machine. Doctor prints it as a `warning:` line with a `fix:`
+- `idle`: hooks fire here; nothing recorded yet (logged out, glen off, or
+  no completed turn).
+- `never`: hooks have never fired on THIS machine. Doctor prints it as a `warning:` line with a `fix:`
   under it: untrusted hooks (trust them in-agent and start a new
   session), a PATH gap, a failed hook-trust query, or a machine-topology
   mismatch.
 - A topology mismatch usually means the agent process runs on a different
   machine than the one you're looking at: Codex `--remote` / Desktop-SSH and
-  Claude Code over SSH/devcontainer both run the agent — and its hooks — on
+  Claude Code over SSH/devcontainer both run the agent (and its hooks) on
   the REMOTE host, not locally. Install glen there and run `glen doctor` on
   that machine, as the user the agent connects as. Cloud sessions (Codex
-  Cloud tasks, claude.ai/code) can't run user-level hooks at all — only
+  Cloud tasks, claude.ai/code) can't run user-level hooks at all; only
   repo-committed hooks apply there.
 
 Finish with `glen status` and tell the user, in one sentence, what state they
