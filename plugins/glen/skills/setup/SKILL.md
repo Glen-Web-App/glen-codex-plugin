@@ -52,9 +52,12 @@ whether the plugin is installed:
   machine than the one you're looking at: Codex `--remote` / Desktop-SSH and
   Claude Code over SSH/devcontainer both run the agent (and its hooks) on
   the REMOTE host, not locally. Install glen there and run `glen doctor` on
-  that machine, as the user the agent connects as. Cloud sessions (Codex
-  Cloud tasks, claude.ai/code) can't run user-level hooks at all; only
-  repo-committed hooks apply there.
+  that machine, as the user the agent connects as. Cloud sessions differ:
+  Claude Code Cloud (claude.ai/code) records only from a cloud environment
+  set up with glen's Connect an agent → Claude Code Cloud steps (setup
+  script, `GLEN_ORG_ID`, the API key as a network secret). Codex Cloud
+  tasks can't run glen's hooks at all; they can only search glen through
+  the glen app in ChatGPT.
 
 Finish with `glen status` and tell the user, in one sentence, what state they
 are in now.

@@ -1,6 +1,6 @@
 ---
 name: create-skill
-description: Turn what you just did (or a markdown prompt the user provides) into a reusable skill, either a local SKILL.md on this machine or a shared Glen skill saved to the org's library. Use when the user says "make this a skill", "save this as a skill", "save this as a Glen skill", or wants to capture a repeatable workflow.
+description: Turn what you just did (or a markdown prompt the user provides) into a reusable skill, either a local SKILL.md on this machine or a shared Glen skill saved to the org's library. Use when the user says "make this a skill", "save this as a skill", "save this as a Glen skill", or wants to capture a repeatable workflow. Also use when the user asks to delete a Glen skill they authored.
 ---
 
 You are authoring a reusable **skill**: a focused markdown prompt another agent will follow later, with no memory of this session.
@@ -9,12 +9,12 @@ You are authoring a reusable **skill**: a focused markdown prompt another agent 
    - **Check incognito before anything else:** run `glen status` via Bash. If it reports `incognito: ON`, a Glen skill is off the table (nothing is recorded off the record), so go straight to a **local skill** and tell the user that's why (e.g. "you're off the record, so I'll save this as a local skill").
    - **Otherwise, ask the user which they want** before authoring anything: a local `SKILL.md` (a Codex skill on this machine) or a Glen skill (saved to your Glen library). Don't start writing until they answer.
 2. **Gather the real workflow.** Read this conversation for the steps that actually worked. For anything done in an earlier session, run `glen search "<topic>"` via Bash to pull the relevant memory. Ask one or two clarifying questions only if the goal or trigger is genuinely ambiguous.
-3. **Name + describe it.** A short imperative name and a one-sentence description that says *exactly when to trigger it* (this drives discovery).
+3. **Name + describe it.** A short imperative name and a one-sentence description that says _exactly when to trigger it_ (this drives discovery).
 4. **Write a tight SKILL.md body.** Best practices:
-   - Lead with *when to use it* and the end goal.
+   - Lead with _when to use it_ and the end goal.
    - Give concrete, ordered steps (exact commands, file paths, gotchas), not vague advice.
    - Keep it self-contained: assume zero prior context. Cut anything that isn't actionable.
-   - **Reference other skills** when a step is itself a saved skill: write a markdown link `[Display text](glen:<slug>)` (find the slug with `glen skill search`). Glen tracks the link automatically and the reader will get a runnable `glen skill use <slug>` command exactly there. Keep each referenced skill focused and say *when* to reach for it. Reserve this for genuinely **shared** skills: ones that also get used on their own, independent of this one.
+   - **Reference other skills** when a step is itself a saved skill: write a markdown link `[Display text](glen:<slug>)` (find the slug with `glen skill search`). Glen tracks the link automatically and the reader will get a runnable `glen skill use <slug>` command exactly there. Keep each referenced skill focused and say _when_ to reach for it. Reserve this for genuinely **shared** skills: ones that also get used on their own, independent of this one.
    - **If the skill needs supporting material, bundle it in one skill directory, not separate subskills.** Put long reference material in `references/*.md` and executable helpers in `scripts/` alongside `SKILL.md`, and point to them from the body as `${GLEN_SKILL_DIR}/references/<name>.md` / `${GLEN_SKILL_DIR}/scripts/<name>`. `glen skill use` materializes the whole directory to disk and substitutes `${GLEN_SKILL_DIR}` with its real absolute path before printing, so the reader can run the script or open the reference exactly as written. This keeps one topic as one skill instead of splintering it into a root + subskills just to hold its own files.
 5. **Finish based on the destination chosen in step 1:**
 
@@ -38,4 +38,6 @@ You are authoring a reusable **skill**: a focused markdown prompt another agent 
      ```
 
      `--file` and `--dir` are mutually exclusive. On a name collision either form errors; pick a different name and retry, or pass `--update` to overwrite a skill you previously authored.
+
    - The skill is **private to the user by default**. Ask the user whether to share it: with the whole org (add `--org` to `glen skill create`, or later `glen skill share <slug> --org`) or with specific teammates (`glen skill share <slug> --with <email>[,<email>…]`). Confirm the saved slug and its visibility back to the user.
+   - **Deleting a skill (author-only, when asked).** `glen skill delete <slug>` permanently deletes a Glen skill the user authored, for everyone it was shared with. Confirm the slug with the user first; this can't be undone.
