@@ -97,8 +97,9 @@ relevant memories but writes nothing to team memory. Admin analytics still count
 prompts as numbers only. Toggle with `glen incognito` / `glen on`. `glen off` injects
 and records nothing.
 
-The glen CLI also reports content-free error codes about itself (error code, command and flag names, CLI, OS and agent
-versions; never prompts, paths, flag values or content), incognito included. Turn this off with
+The glen CLI also reports content-free error codes about itself (error code, command and flag names, agent name, CLI
+and Node versions, OS and architecture, a random install id; never prompts, paths, flag values or content), incognito
+included. Turn this off with
 `glen telemetry disable` or `DO_NOT_TRACK=1`.
 
 ## Updating
