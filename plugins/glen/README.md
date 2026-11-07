@@ -6,7 +6,8 @@ the same institutional knowledge.
 
 ## What it does
 
-The glen plugin registers these hooks, each a one-line `glen` CLI call:
+`glen install` registers these hooks in `~/.codex/hooks.json`, each a one-line
+`glen` CLI call:
 
 - **SessionStart** (`glen session-start`): injects glen's status (org, mode) as
   context, shows a notice when glen is off, incognito, or silent, and runs
@@ -18,6 +19,9 @@ The glen plugin registers these hooks, each a one-line `glen` CLI call:
 - **PostToolUse** on Bash (`glen pr-link`): after a `git commit`, links the commit
   to the session in glen; when a command prints a GitHub PR URL for this clone's repo,
   has the agent offer Glen's local reviewer (`glen review <n> --detach`), once per PR.
+
+Every hook exits 0, so a glen outage never blocks your Codex session. The plugin
+itself ships only skills.
 
 `glen off` injects and records nothing. In incognito (`glen incognito`) recall still
 works but nothing is recorded to team memory. Glen reads only the hook input, the
@@ -49,44 +53,26 @@ The plugin ships skills the agent invokes on demand:
 
 ## Install
 
-1. Install the glen CLI (the plugin's hooks call it):
+1. Install the glen CLI (glen's hooks call it):
 
    ```bash
    npm install -g @tryglen/cli
    glen login
    ```
 
-2. Register the plugin and its hooks:
+2. Register the plugin and glen's hooks:
 
    ```bash
    glen install
    ```
 
-   `glen install` runs the Codex marketplace/plugin steps AND registers
-   glen's hooks in Codex's user config layer (`~/.codex/hooks.json`), then
-   auto-trusts them (`[hooks.state]` records in `~/.codex/config.toml`).
+   `glen install` runs the Codex marketplace/plugin steps and registers
+   glen's hooks in Codex's user config layer (`~/.codex/hooks.json`). Codex
+   runs only hooks you have trusted, so approve the glen hooks if Codex asks
+   (or open Codex and run `/hooks`).
 
 After login your active organization is saved locally. Switch orgs at any time with
 `glen org switch`.
-
-## Why hooks live in `~/.codex/hooks.json`
-
-Codex does not fire hooks declared by plugin manifests
-([openai/codex#16430](https://github.com/openai/codex/issues/16430)): the
-manifest in this package enumerates them (and will start working when the
-upstream fix ships), but today the only layer Codex's runtime actually
-executes is the user config layer. `glen install` writes glen's four hook
-lines there:
-
-- `SessionStart` → `glen session-start --agent codex` (injects org/session context)
-- `UserPromptSubmit` → `glen ingest --agent codex` (memory recall in, capture out)
-- `Stop` → `glen ingest --agent codex` (records the finished turn)
-- `PostToolUse` (matcher `Bash`) → `glen pr-link --agent codex` (links commits, offers the local reviewer for new PRs)
-
-All always exit 0, so a glen outage can never block your Codex session.
-Re-running `glen install` repairs the registration idempotently; other
-tools' hooks in the same file are preserved. If auto-trust fails, open
-Codex, run `/hooks`, and trust the glen hooks manually.
 
 ## Uninstall
 
@@ -114,9 +100,6 @@ and records nothing.
 The glen CLI also reports content-free error codes about itself (error code, command and flag names, CLI, OS and agent
 versions; never prompts, paths, flag values or content), incognito included. Turn this off with
 `glen telemetry disable` or `DO_NOT_TRACK=1`.
-
-Glen never sends data to any third party. All memory is stored in your org's private
-glen instance.
 
 ## Updating
 
@@ -159,8 +142,8 @@ runs `glen doctor` and fixes whatever it reports.
 
 **Hooks not firing:** Re-run `glen install`. It idempotently repairs the hook
 registration in `~/.codex/hooks.json` and the trust records in `~/.codex/config.toml`.
-Codex silently skips untrusted hooks; if auto-trust failed, open Codex, run `/hooks`,
-and trust the glen hooks manually.
+Codex silently skips untrusted hooks, so open Codex, run `/hooks`, and trust the glen
+hooks.
 
 **Stale update lock** (if `glen update` hangs): remove the lock file and retry:
 
@@ -172,65 +155,3 @@ glen update
 **No active organization error:** run `glen org switch` to select an org, or
 `glen org list` to see your memberships. If the list itself fails with an auth error,
 run `glen login` to reconnect.
-
----
-
-> **Note:** This repository is generated from the
-> [glen monorepo](https://github.com/Glen-Web-App/glen) (`packages/codex-plugin`).
-> Please open pull requests and issues there, not here.
-
----
-
-## Maintainer note: verified plugin.json shape
-
-The `plugin.json` manifest shape was verified against the Rust deserializer struct in
-the openai/codex source on **2026-06-11**:
-
-**Source:** `codex-rs/core-plugins/src/manifest.rs`, `RawPluginManifest` struct
-
-Verified fields (all optional via `#[serde(default)]` except `name`):
-
-| JSON key | Rust type | Notes |
-|---|---|---|
-| `name` | `String` | Required (defaults to dir name if empty) |
-| `version` | `Option<String>` | |
-| `description` | `Option<String>` | |
-| `keywords` | `Vec<String>` | |
-| `skills` | `Option<RawPluginManifestPath>` | **Single path string** (e.g. `"./skills"`), not an array |
-| `mcpServers` | `Option<String>` | camelCase from `mcp_servers` |
-| `apps` | `Option<String>` | |
-| `hooks` | `Option<RawPluginManifestHooks>` | Path string, path array, inline object, or inline array |
-| `interface` | `Option<RawPluginManifestInterface>` | Nested display metadata |
-
-**Fields NOT in the struct** (no `deny_unknown_fields` so they are silently ignored):
-`author`, `homepage`, `repository`, `license`.
-
-**Path resolution:** `load_plugin_manifest(plugin_root)` resolves every manifest path
-(`skills`, `hooks`, `mcpServers`, `apps`) against the **plugin root directory**, not
-against `.codex-plugin/` where this manifest lives, so `"./hooks/hooks.json"` and
-`"./skills"` are correct as written. Do not "fix" them to `../`.
-
-The plan's plugin.json proposed `"author": "Glen <https://tryglen.com>"` and `"license": "MIT"`;
-these are harmless but not consumed by Codex. They were omitted from the final plugin.json
-to keep the manifest minimal and avoid drift if the struct ever adds conflicting fields.
-
-**marketplace.json** verified against `RawMarketplaceManifest` in
-`codex-rs/core-plugins/src/marketplace.rs` on the same date:
-
-| JSON key | Rust type | Notes |
-|---|---|---|
-| `name` | `String` | Required |
-| `interface` | `Option<RawMarketplaceManifestInterface>` | Optional; only `displayName` inside |
-| `plugins` | `Vec<RawMarketplaceManifestPlugin>` | Required |
-
-Plugin entry (`RawMarketplaceManifestPlugin`): `name` (required), `source` (required),
-`policy` (optional), `category` (optional). **No `description` field on plugin entries.**
-
-The plan's marketplace.json included a `description` field on the plugin entry; this
-is silently ignored (no `deny_unknown_fields`). It was omitted from the final file.
-
-The plan also proposed an `owner` field at the marketplace root; this does not exist in
-the struct and was omitted.
-
-`source` uses an untagged enum; the `{ "source": "local", "path": "..." }` object form
-maps to `RawMarketplaceManifestPluginSourceObject::Local`.
