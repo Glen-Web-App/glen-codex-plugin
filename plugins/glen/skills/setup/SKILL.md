@@ -9,8 +9,13 @@ user what changed. After the `status:` lines, doctor lists problems: `error:`
 (broken) and `warning:` (worth fixing) lines, each with a `fix:` line under it,
 then `hint:` lines for things that may not apply. It still exits 0.
 
-- `glen: command not found` → install the CLI: `npm install -g @tryglen/cli`,
-  then run `glen install` (it sets up the plugin + hooks for this agent).
+- `glen: command not found` → run
+  `npx @tryglen/cli@latest install --agent <agent>`, with `<agent>` set to the
+  agent you are running in (the command's `--help` lists the names). It installs
+  the CLI, even if npm's global folder isn't writable, and sets up this agent's
+  plugin, or prints the steps to do it. `glen` may still not be on PATH in this
+  shell: if the output prints a PATH fix or a full path to `glen`, apply it or
+  use that path. Then run `glen login`, because `--agent` skips sign-in.
 - `status: cli=<x> latest=<y> channel=<...>` where y is newer than x → run
   `glen update` (updates the CLI and any installed glen plugins in one go).
 - `status: login=missing ...` → run `glen login`. A browser window opens with
