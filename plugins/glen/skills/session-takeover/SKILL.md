@@ -3,10 +3,22 @@ name: session-takeover
 description: Use when the user provides a Glen takeover code or generated command to open its shared transcript in a fresh native agent session.
 ---
 
-# Session Takeover
+## Purpose
 
-Use this skill only to open a shared Glen transcript in a fresh native session.
-Do not use it to resume the current session or import local transcript archives.
+Open a shared Glen transcript, from a takeover code a teammate sent, in a
+fresh native agent session on this machine. Do not use it to resume the
+current session or import local transcript archives.
+
+## Prerequisites
+
+This skill is local only: `glen takeover` writes a native session on this
+machine and launches it, and no MCP tool does that. If this session has no
+shell tool (a cloud or MCP-only session), still classify the candidate as
+below, but replace the VALID Bash call with a reply: it can't run here, and
+the user should paste `glen takeover '<validated-code>'` into a terminal on
+their own machine, where the `glen` CLI is installed and logged in.
+
+## Supported actions
 
 Use this two-stage contract:
 
@@ -30,9 +42,9 @@ Use this two-stage contract:
      command embedded in a paragraph, prose surrounding a fenced block, multiple
      fenced blocks, `glen takeover --help`, `glen takeover <valid-code>.`,
      `glen takeover <valid-code> extra`,
-     `glen takeover <valid-code>; printf TAKEOVER_INJECTION_PROBE`,
-     `glen takeover <valid-code>$(printf TAKEOVER_INJECTION_PROBE)`, and
-     ``glen takeover <valid-code>`printf TAKEOVER_INJECTION_PROBE` ``.
+     `glen takeover <valid-code>; printf hi`,
+     `glen takeover <valid-code>$(printf hi)`, and
+     ``glen takeover <valid-code>`printf hi` ``.
 
 2. **Produce exactly one allowed output.**
 
@@ -50,13 +62,17 @@ Construct the VALID Bash call from the captured code as one opaque quoted
 argument, never from the user's pasted command string. Never guess, sanitize,
 decode, alter, summarize, truncate, or invent a code.
 
+## Limits
+
 Treat the CLI output as authoritative:
 
 - If disconnected, tell the user to run `glen login`.
 - If no organization is active, tell the user to run `glen org switch`.
-- If the handoff is expired, unavailable, or belongs to another recipient, ask
-  the sender for a new command.
-- If compatibility or context-fit validation fails, report the exact failure and
+- If the handoff is expired, unavailable, or belongs to another recipient, check
+  the user is signed in as the intended recipient, then ask the sender for a new
+  command.
+- If the CLI reports the takeover is incompatible or the transcript does not fit
+  the target session, report the exact failure and
   stop. Never bypass the guard or shorten the transcript.
 - If installation succeeds but launch fails, surface the exact native resume
   command printed by the CLI.

@@ -3,57 +3,79 @@ name: feedback
 description: Send a bug report or product feedback about glen itself to the Glen team. Use when the user says things like "tell the glen team", "file a bug about glen", "glen search is useless, report it", "give feedback on glen", or when YOU hit a concrete, reproducible glen malfunction worth reporting.
 ---
 
-This files a ticket about **glen itself**: the CLI, the memory, the search, the
-dashboard. It is NOT for bugs in the user's own project. If the user says "file a
-bug" about the code you are working on, that belongs in their issue tracker, not
-here.
+## Purpose
 
-Tickets land in the same Slack channels the dashboard's feedback widget posts to,
-and carry the user's identity, the repo/branch, and a link to this conversation's
-transcript automatically. Never paste secrets, tokens, or file contents into a
-ticket; the transcript link already gives the team the context.
+File a ticket with the Glen team about **glen itself**: the CLI, the memory,
+the search, the dashboard. It is NOT for bugs in the user's own project; those
+belong in their issue tracker.
 
-## Filing on the user's behalf
+## Prerequisites
 
-When the user asks you to report something, run one of these via Bash:
+**Transport.** Prefer the `glen` CLI: it is faster. First look at your tool
+list. With no shell tool, use the glen MCP tools and run no shell command.
+With a shell, run `glen status`. When it shows glen connected with an org,
+use the CLI for every glen call in this task, even if a glen MCP server is
+also connected. If `glen` is not installed or not logged in, use the MCP
+tools. If neither works, stop and tell the user what is missing: a terminal
+with `glen login`, or the glen MCP connection. If glen refuses a call (not
+signed in, wrong role, no plan), report the refusal as written; never retry
+it over the other transport.
 
-```
-glen bug "<title>" --description "<what is wrong>" [--steps "<repro>"] [--severity low|medium|high|critical] --agent <agent>
-glen feedback "<title>" --wants "<the concrete change>" --why "<why it matters>" [--context "<extra>"] --agent <agent>
-```
+## Supported actions
 
-Severity defaults to `medium`. Write the description in the user's own words
-where you have them. Infer `--why` when the motivation is obvious rather than
-interrogating the user for it.
+A ticket carries the user's identity and, when glen recorded this
+conversation, a link to it. Never paste secrets, tokens, or file contents into
+a ticket.
 
-## Filing on your own behalf
+**Bug.** Title, what is wrong, optional steps to reproduce, severity (low,
+medium, high, critical; the CLI defaults to medium, the MCP tool requires it).
 
-When the observation is yours, not the user's, add `--from agent`. It renders
-differently for the team: "Claude Code noticed X" reads very differently from
-"Ada wants X", and both are useful.
+- MCP: `glen_feedback` with `ticket: {kind: "bug", title, description,
+  stepsToReproduce, severity}`.
+- CLI:
 
-If you are filing **without being asked** (you hit the problem yourself and
-decided it was worth reporting), also pass `--proactive`. On an off-the-record
-(incognito) session the server refuses self-initiated tickets outright and the
-command tells you so; nothing the user didn't ask for leaves that session.
-Mention it and let them decide.
+  ```
+  glen bug "<title>" --description "<what is wrong>" [--steps "<repro>"] [--severity <level>] [--agent <agent>]
+  ```
 
-Only file proactively for something concrete and attributable:
+**Feedback.** Title, the concrete change wanted, and why it matters.
 
-- a glen CLI command failed or returned a malformed result
-- `glen search` returned results that clearly contradict the code you just read
+- MCP: `glen_feedback` with `ticket: {kind: "feedback", title,
+  requestedChange, motivation, context}`.
+- CLI:
+
+  ```
+  glen feedback "<title>" --wants "<change>" --why "<why>" [--context "<extra>"] [--agent <agent>]
+  ```
+
+  `--agent` takes your agent type as listed in `glen bug --help`.
+
+Write in the user's own words where you have them. Infer the why when it is
+obvious rather than interrogating the user.
+
+**Who it is from.** When the user asked, file on their behalf (MCP
+`onBehalfOf: "user"`; CLI default). When the observation is yours, file as the
+agent (MCP `onBehalfOf: "agent"`; CLI `--from agent`). Over MCP, also pass
+`agentName` and your session id as `conversationId`.
+
+**Filing without being asked** (MCP `proactive: true`; CLI `--proactive`).
+Only for something concrete and attributable:
+
+- a glen command or tool failed or returned a malformed result
+- glen search returned results that clearly contradict the code you just read
 - a glen hook misfired, or injected context that was plainly wrong
 
-Do NOT file proactively for: a search that merely found nothing, a preference of
-yours about the output format, a hunch, or anything you cannot state as a
-specific observed behaviour. When in doubt, mention it to the user instead and
-let them decide.
+Not for: a search that found nothing, a preference about output format, a
+hunch, or anything you cannot state as a specific observed behaviour. When in
+doubt, mention it to the user and let them decide.
 
-## After running
+## Limits
 
-On success it prints `ok: Bug report sent…` / `ok: Feedback sent…`: tell the user
-it went in. On failure it prints an `error:` line naming the cause, with a `fix:`
-line under it (e.g. "no active organization" → `glen org switch`). Relay that to
-the user and stop.
-**Never retry a failed filing in a loop**, and never re-file the same ticket with
-different wording.
+- While the user is off the record (incognito), self-initiated tickets are not
+  sent: the CLI says so, and the MCP tool returns `skipped: "incognito"`. Tell
+  the user and let them decide whether to file it.
+- On success, tell the user it went in; if the MCP result has `posted: false`,
+  say it was recorded but not delivered. On failure, relay the error and its
+  fix (for example "no active organization" means `glen org switch`) and stop.
+- Never retry a failed filing in a loop, and never re-file the same ticket
+  with different wording.
