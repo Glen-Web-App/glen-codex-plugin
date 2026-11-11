@@ -17,8 +17,9 @@ the same institutional knowledge.
   matching memories, and injects them as additional context for the model.
 - **Stop** (`glen ingest`): records the finished turn.
 - **PostToolUse** on Bash (`glen pr-link`): after a `git commit`, links the commit
-  to the session in glen; when a command prints a GitHub PR URL for this clone's repo,
-  has the agent offer Glen's local reviewer (`glen review <n> --detach`), once per PR.
+  to the session in glen; after `gh pr create`, has the agent offer Glen's local
+  reviewer (`glen review <n> --detach`), once per PR. `glen suggestions review off`
+  turns that offer off.
 
 Every hook exits 0, so a glen outage never blocks your Codex session. The plugin
 itself ships only skills.

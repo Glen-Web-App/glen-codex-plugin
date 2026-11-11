@@ -1,14 +1,14 @@
 ---
 name: controls
-description: Control glen memory - turn glen on/off, go off the record (incognito, account-wide), go silent (keep recording, surface nothing), toggle glen's skill suggestions, or switch which organization's memory is active. Use ONLY when the user explicitly asks (e.g. "turn glen off", "go off the record", "stop recording", "stop suggesting skills", "just record, don't inject anything", "switch to my personal org").
+description: Control glen memory - turn glen on/off, go off the record (incognito, account-wide), go silent (keep recording, surface nothing), toggle glen's skill suggestions or PR review offers, or switch which organization's memory is active. Use ONLY when the user explicitly asks (e.g. "turn glen off", "go off the record", "stop recording", "stop suggesting skills", "stop offering PR reviews", "just record, don't inject anything", "switch to my personal org").
 ---
 
 ## Purpose
 
 Change how glen records and recalls for this user, only when they explicitly
 ask. Every mode and suggestion setting is account-wide and server-enforced: it
-applies on every machine, agent, and connected client, and the same switches
-live in the dashboard under Settings > Memory.
+applies on every machine, agent, and connected client. The mode and skill
+suggestion switches also live in the dashboard under Settings > Memory.
 
 ## Prerequisites
 
@@ -32,6 +32,7 @@ it over the other transport.
 | Incognito: keep recalling, record nothing ("go off the record", "stop recording") | `glen_set_recording` `{mode: "incognito"}` | `glen incognito` |
 | Silent: keep recording, surface nothing ("just record, stay out of my way") | `glen_set_recording` `{mode: "silent"}` | `glen silent` |
 | Skill suggestions on or off | `glen_set_suggestions` `{skillCreation}` and/or `{skillUse}` | `glen suggestions skill-create on\|off`, `glen suggestions skill-use on\|off` |
+| PR review offers on or off (glen offering to open a PR the agent just created in the local reviewer) | `glen_set_suggestions` `{review}` | `glen suggestions review on\|off` |
 | See or switch the active org | `glen_list_orgs` (read only) | `glen org list`, `glen org switch <slug>` |
 
 **Before turning capture on** (on, or silent, from off or incognito), tell the
