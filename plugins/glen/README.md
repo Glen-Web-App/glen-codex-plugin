@@ -67,9 +67,11 @@ The plugin ships skills the agent invokes on demand:
    ```
 
    `glen install` runs the Codex marketplace/plugin steps and registers
-   glen's hooks in Codex's user config layer (`~/.codex/hooks.json`). Codex
-   runs only hooks you have trusted, so approve the glen hooks if Codex asks
-   (or open Codex and run `/hooks`).
+   glen's hooks in Codex's user config layer (`~/.codex/hooks.json`).
+
+3. Open Codex, run `/hooks`, and trust the glen hooks. Codex only runs hooks
+   you've trusted, so glen records nothing until you do. Until then,
+   `glen doctor` shows `trust=pending`.
 
 After login your active organization is saved locally. Switch orgs at any time with
 `glen org switch`.
@@ -80,8 +82,8 @@ After login your active organization is saved locally. Switch orgs at any time w
 glen uninstall
 ```
 
-Removes the glen plugin and marketplace, glen's hook entries and trust records,
-and the rest of glen's local setup.
+Removes the glen plugin and marketplace, glen's hook entries, and the rest of
+glen's local setup.
 
 ## What data is sent
 
@@ -141,10 +143,9 @@ glen doctor
 **Broken setup?** Ask the agent to "set up glen"; the bundled setup skill
 runs `glen doctor` and fixes whatever it reports.
 
-**Hooks not firing:** Re-run `glen install`. It idempotently repairs the hook
-registration in `~/.codex/hooks.json` and the trust records in `~/.codex/config.toml`.
-Codex silently skips untrusted hooks, so open Codex, run `/hooks`, and trust the glen
-hooks.
+**Hooks not firing:** Run `glen doctor`. If it shows `trust=pending`, open
+Codex, run `/hooks`, and trust the glen hooks. If it shows
+`hooks=not-registered`, re-run `glen install`.
 
 **Stale update lock** (if `glen update` hangs): remove the lock file and retry:
 
