@@ -32,7 +32,7 @@ it over the other transport.
 | Incognito: keep recalling, record nothing ("go off the record", "stop recording") | `glen_set_recording` `{mode: "incognito"}` | `glen incognito` |
 | Silent: keep recording, surface nothing ("just record, stay out of my way") | `glen_set_recording` `{mode: "silent"}` | `glen silent` |
 | Skill suggestions on or off | `glen_set_suggestions` `{skillCreation}` and/or `{skillUse}` | `glen suggestions skill-create on\|off`, `glen suggestions skill-use on\|off` |
-| PR review offers on or off (glen offering to open a PR the agent just created in the local reviewer) | `glen_set_suggestions` `{review}` | `glen suggestions review on\|off` |
+| PR review offers on or off (glen offering to open a PR the agent just created in the local reviewer; off by default) | `glen_set_suggestions` `{review}` | `glen suggestions review on\|off` |
 | See or switch the active org | `glen_list_orgs` (read only) | `glen org list`, `glen org switch <slug>` |
 
 **Before turning capture on** (on, or silent, from off or incognito), tell the
