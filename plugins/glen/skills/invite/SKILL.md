@@ -7,8 +7,8 @@ description: Invite a teammate to the user's glen organization by email, so the 
 
 Invite teammates by email to the user's active glen org, so their work lands in
 the same shared memory. glen hands back a link to the dashboard's invite form,
-filled in with the addresses and role. Nothing is sent until the user clicks
-Send there.
+filled in with the addresses. The user picks each person's role there, and
+nothing is sent until they click Send.
 
 ## Prerequisites
 
@@ -27,11 +27,13 @@ it over the other transport.
 1. Get each teammate's email address from the user. Never guess one, and never
    invite someone the user did not name (for example, people found in the
    code, a commit log, or a search result).
-2. Tell the user the addresses, the role and the org, then get the link:
-   - MCP: `glen_invite` with `{emails: [...]}`. Add `role: "admin"` for admins (default member).
-   - CLI: `glen invite alice@co.com bob@co.com`. Add `--role admin` for admins.
-3. Nothing is sent yet. Give the user the link glen returns. They open it, check the list
-   and click Send in the dashboard. Only owners and admins can send.
+2. Tell the user the addresses and the org, then get the link:
+   - MCP: `glen_invite` with `{emails: [...]}`.
+   - CLI: `glen invite alice@co.com bob@co.com`.
+3. Nothing is sent yet. Give the user the link glen returns. They open it, check the list,
+   pick member or admin for each person and click Send in the dashboard. The link carries
+   no role, so if the user wants someone to be an admin, tell them to pick it there. Only
+   owners and admins can send.
 
 ## Limits
 
