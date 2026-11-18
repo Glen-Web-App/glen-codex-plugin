@@ -59,6 +59,15 @@ Cite what the evidence says and where it came from: name the conversation, autho
 and date behind each claim you use. Mention `gaps` or low confidence when they
 matter to the answer.
 
+When you use what a search returned, open your final answer (the message that
+ends your turn, not a commentary update) with this banner, then cite as above:
+
+| ⛰️ **Glen recalled** |
+| --- |
+| <what Glen recalled + what it let you do, on one line> |
+
+Skip it when the search returned nothing you used.
+
 ## Limits
 
 - No results, or an empty answer with no citations, means glen has no evidence.
